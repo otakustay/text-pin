@@ -1,0 +1,110 @@
+{
+  "name": "@otakustay/text-pin",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Pin at a certain position in text, make it ressilent to text modification",
+  "license": "Apache-2.0",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js"
+    }
+  },
+  "module": "./es/index.js",
+  "main": "./cjs/index.js",
+  "types": "./cjs/index.d.ts",
+  "engines": {
+    "node": ">= 18"
+  },
+  "files": [
+    "esm",
+    "cjs"
+  ],
+  "scripts": {
+    "clean": "wireit",
+    "build": "wireit",
+    "lint": "wireit",
+    "test": "wireit",
+    "ci": "npm ci && npm run clean && npm run build && npm run lint && npm run test",
+    "prepare": "husky",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "wireit": {
+    "clean": {
+      "command": "rm -rf esm cjs"
+    },
+    "build-esm": {
+      "command": "tsc -p tsconfig.esm.json",
+      "files": [
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsconfig.esm.json",
+        "src/**"
+      ],
+      "output": [
+        "esm/**"
+      ]
+    },
+    "build-cjs": {
+      "command": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > cjs/package.json",
+      "files": [
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsconfig.cjs.json",
+        "src/**"
+      ],
+      "output": [
+        "cjs/**"
+      ]
+    },
+    "build": {
+      "dependencies": [
+        "build-esm",
+        "build-cjs"
+      ]
+    },
+    "lint": {
+      "command": "eslint --max-warnings=0 --fix src",
+      "files": [
+        "tsconfig.json",
+        "eslint.config.js",
+        "src/**"
+      ],
+      "output": []
+    },
+    "test": {
+      "command": "vitest run",
+      "files": [
+        "tsconfig.json",
+        "vite.config.js",
+        "src/**"
+      ],
+      "output": [
+        "coverage"
+      ]
+    }
+  },
+  "homepage": "https://github.com/otakustay/text-pin",
+  "bugs": {
+    "url": "https://github.com/otakustay/text-pin/issues"
+  },
+  "author": "otakustay <otakustay@gmail.com> (https://github.com/otakustay)",
+  "repository": "github:otakustay/text-pin",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@eslint/js": "^9.16.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "dprint": "^0.47.6",
+    "eslint": "^9.16.0",
+    "husky": "^9.1.7",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.17.0",
+    "vite": "^6.0.2",
+    "vitest": "^2.1.8",
+    "wireit": "^0.14.9"
+  }
+}
